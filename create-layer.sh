@@ -2,6 +2,12 @@
 # Thanks to https://medium.com/srcecde/aws-lambda-layer-building-made-easy-2c97572047db
 set -e
 
+if [ $# -eq 0 ]; then
+    >&2 echo "No arguments provided - please provide layer name, runtime and packages. For example: ./create-layer.sh my-layer-name python3.8 requests pytz"
+    exit 1
+fi
+
+
 layername="$1"
 runtime="$2"
 packages="${@:3}"
