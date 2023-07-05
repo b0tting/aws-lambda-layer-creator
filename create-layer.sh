@@ -56,7 +56,7 @@ mv "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
 echo "Finishing up - find your layer file as ${layername}.zip"
 
-if [ -z "$CLEANUP" ]; then
+if [ "$CLEANUP" == "0" ]; then
   # Docker in github actions runs under a local root user, I cannot delete the temp dir after that
   echo "Skipping cleanup"
 else
