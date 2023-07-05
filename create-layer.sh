@@ -41,12 +41,12 @@ if [[ "${support_node_runtime[*]}" == *"${runtime}"* ]]; then
     installation_path="nodejs"
     docker_image="public.ecr.aws/sam/build-$runtime:latest"
     echo "Preparing lambda layer"
-    docker run --rm -v "$host_temp_dir:/lambda-layer" -w "/lambda-layer" "$docker_image" /bin/bash -c "mkdir $installation_path && npm install --prefix $installation_path --save $packages && zip -r lambda-layer.zip *"
+    docker run --rm -v "$host_temp_dir:/lambda-layer" -w "/lambda-layer" "$docker_image" /bin/bash -c "mkdir $installation_path && npm install --prefix $installation_path --save $packages && zip -r lambda-layer.zip * && rm -rf $installation_path"
 elif [[ "${support_python_runtime[*]}" == *"${runtime}"* ]]; then
     installation_path="python"
     docker_image="public.ecr.aws/sam/build-$runtime:latest"
     echo "Preparing lambda layer"
-    docker run --rm -v "$host_temp_dir:/lambda-layer" -w "/lambda-layer" "$docker_image" /bin/bash -c "mkdir $installation_path && pip install $packages -t $installation_path  && zip -r lambda-layer.zip * -x '*/__pycache__/*'"
+    docker run --rm -v "$host_temp_dir:/lambda-layer" -w "/lambda-layer" "$docker_image" /bin/bash -c "mkdir $installation_path && pip install $packages -t $installation_path  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf $installation_path"
 else
     echo "Invalid runtime"
     exit 1
@@ -55,7 +55,7 @@ fi
 cp "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
 echo "Deleting temporary files"
-docker run --rm -v "$host_temp_dir" "$docker_image" find "$host_temp_dir/*" -print -exec rm -rf {} \;
+docker run --rm -v "$host_temp_dir" "$docker_image" find "$installation_path/*" -print -exec rm -rf {} \;
 echo "Deleted"
 
 
