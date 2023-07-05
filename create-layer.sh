@@ -42,6 +42,7 @@ if [[ "${support_node_runtime[*]}" == *"${runtime}"* ]]; then
     docker_image="public.ecr.aws/sam/build-$runtime:latest"
     echo "Preparing lambda layer"
     docker run --rm -v "$host_temp_dir:/lambda-layer" -w "/lambda-layer" "$docker_image" /bin/bash -c "mkdir $installation_path && npm install --prefix $installation_path --save $packages && zip -r lambda-layer.zip *"
+    docker run --rm -v "$host_temp_dir:/" "$docker_image" chown -R $(id -un):$(id -un) "$host_temp_dir:/"
 elif [[ "${support_python_runtime[*]}" == *"${runtime}"* ]]; then
     installation_path="python"
     docker_image="public.ecr.aws/sam/build-$runtime:latest"
@@ -51,6 +52,8 @@ else
     echo "Invalid runtime"
     exit 1
 fi
+
+docker run --rm -v "$host_temp_dir:/" "$docker_image" chown -R $(id -un):$(id -un) "$host_temp_dir:/"
 
 mv "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 

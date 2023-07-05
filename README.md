@@ -16,7 +16,7 @@ chmod +x /usr/local/bin/create-layer
 ```
 OR (Follow one-click install)
 ```bash
-SCRIPT_INSTALL_LOC=/usr/local/bin/create-layer; curl https://raw.githubusercontent.com/srcecde/aws-lambda-layer-creator/main/create-layer.sh > $SCRIPT_INSTALL_LOC; chmod +x $SCRIPT_INSTALL_LOC
+SCRIPT_INSTALL_LOC=/usr/local/bin/create-layer.sh; curl https://raw.githubusercontent.com/b0tting/aws-lambda-layer-creator/main/create-layer.sh > $SCRIPT_INSTALL_LOC; chmod +x $SCRIPT_INSTALL_LOC
 ```
 ## Usage
 ### Python
