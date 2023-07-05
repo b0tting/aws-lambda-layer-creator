@@ -7,9 +7,9 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-
 layername="$1"
 runtime="$2"
+# shellcheck disable=SC2124
 packages="${@:3}"
 
 if ! command -v aws &> /dev/null
@@ -52,7 +52,7 @@ else
     exit 1
 fi
 
-mv $host_temp_dir/lambda-layer.zip ${layername}.zip
+mv "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
 echo "Finishing up - find your layer file as ${layername}.zip"
 rm -rf "$host_temp_dir"

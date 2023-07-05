@@ -29,11 +29,15 @@ create-layer layer-name python-runtime package1 [package2,…]
 - **python-runtime** - Python runtime
 - **package** - Name of the package, library that you want to install
 
+The result will be a ZIP file ready to be uploaded to AWS Lambda.
+
 #### Supported python runtime
 - python3.6
 - python3.7
 - python3.8
 - python3.9
+- python3.10
+- python3.11 (not in Lambda yet)
 
 #### Example
 ```bash
