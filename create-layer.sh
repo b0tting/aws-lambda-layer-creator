@@ -52,7 +52,7 @@ else
     exit 1
 fi
 
-docker run --rm -v "$host_temp_dir:/" "$docker_image" chown -R "$(id -un):$(id -un)" "$host_temp_dir:/"
+docker run --rm -v "$host_temp_dir" "$docker_image" chown -R "$(id -un):$(id -un)" "$host_temp_dir"
 
 mv "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
