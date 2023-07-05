@@ -55,7 +55,7 @@ fi
 cp "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
 echo "Deleting temporary files"
-docker run --rm -v "$host_temp_dir" "$docker_image" 'find "$host_temp_dir/*" -print -exec rm -rf {} \;'
+docker run --rm -v "$host_temp_dir" "$docker_image" find "$host_temp_dir/*" -print -exec rm -rf {} \;
 echo "Deleted"
 
 
