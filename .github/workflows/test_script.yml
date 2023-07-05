@@ -1,0 +1,18 @@
+  on:
+    push:
+      branches: [ master ]
+    pull_request:
+      branches: [ master ]
+  jobs:
+    test_script:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Run ShellCheck
+          uses: ludeeus/action-shellcheck@master
+        - name: Test run lambda creation with python
+          run: |
+            create-layer pandas-numpy-layer python3.9 numpy pandas
+        - name: Test run lambda creation with node
+          run: |
+            create-layer request-moment-layer nodejs14.x request moment
