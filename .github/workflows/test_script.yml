@@ -13,8 +13,10 @@
         - name: Test run lambda creation with python
           run: |
             export TMPDIR=$RUNNER_TEMP 
-            bash create-layer.sh pandas-numpy-layer python3.9 numpy pandas
+            export CLEANUP=0
+            bash create-layer.sh requests-layer python3.9 requests pyyaml
         - name: Test run lambda creation with node
           run: |
             export TMPDIR=$RUNNER_TEMP
+            export CLEANUP=0
             bash create-layer.sh request-moment-layer nodejs14.x request moment
