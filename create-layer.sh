@@ -55,17 +55,9 @@ fi
 cp "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
 echo "Deleting temporary files"
-docker run --rm -v "$host_temp_dir" "$docker_image" find "$installation_path/*" -print -exec rm -rf {} \;
-echo "Deleted"
-
-
+docker run --rm -v "$host_temp_dir:/lambda-layer"  -w "/lambda-layer" "$docker_image" /bin/bash -c "rm -rf lambda-layer.zip";
+rm -rf "$host_temp_dir"
 
 echo "Finishing up - find your layer file as ${layername}.zip"
 
-if [ "$CLEANUP" == "0" ]; then
-  # Docker in github actions runs under a local root user, I cannot delete the temp dir after that
-  echo "Skipping cleanup"
-else
-  rm -rf "$host_temp_dir"
-fi
 
