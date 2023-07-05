@@ -52,7 +52,9 @@ else
     exit 1
 fi
 
-docker run --rm -v "$host_temp_dir" "$docker_image" chmod -R o+rwx "$host_temp_dir"
+echo "Deleting temporary files"
+docker run --rm -v "$host_temp_dir" "$docker_image" rm -rf "$host_temp_dir"
+echo "Deleted"
 
 mv "$host_temp_dir"/lambda-layer.zip "${layername}".zip
 
