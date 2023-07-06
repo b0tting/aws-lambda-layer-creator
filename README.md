@@ -1,17 +1,15 @@
 # AWS Lambda Layer Creator
-
 **Python** & **NodeJS** lambda layer creation made easy!
 
 ## Prerequisites
-- AWS CLI (Install & Configure)
 - Docker (Install)
+
+Not required are any of the runtimes, we'll use docker images for that. 
 
 ## Installation
 Clone the repository or simply download the create-layer.sh and execute below commands
 ```bash
 cp create-layer.sh /usr/local/bin/create-layer
-```
-```bash
 chmod +x /usr/local/bin/create-layer
 ```
 OR (Follow one-click install)
