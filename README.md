@@ -46,7 +46,7 @@ create-layer pandas-numpy-layer python3.9 numpy pandas
 ### Node JS
 To create the layer the command should be in the specified format.
 ```bash
-create-layer layer-name nodejs-runtime package1 [package2,…]
+create-layer.sh layer-name nodejs-runtime package1 [package2,…]
 ```
 - **create-layer** - Command to invoke the script to create lambda layer
 - **layer-name** - Name of the lambda layer (Please make sure to follow the lambda layer naming convention)
@@ -62,5 +62,5 @@ create-layer layer-name nodejs-runtime package1 [package2,…]
 
 #### Example
 ```bash
-create-layer request-moment-layer nodejs14.x request moment
+create-layer.sh request-moment-layer nodejs14.x request moment
 ```
