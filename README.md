@@ -27,7 +27,13 @@ create-layer.sh layer-name python-runtime package1 [package2,…]
 - **python-runtime** - Python runtime
 - **package** - Name of the package, library that you want to install
 
-The result will be a ZIP file ready to be uploaded to AWS Lambda.
+Some limited dependencies are supported, for example:
+```bash
+create-layer.sh requests_310 python3.10 requests urllib3<2
+```
+..would create a layer with requests and the urllib3 dependecy in a version below 2.0. 
+
+The result will be a ZIP file ready to be uploaded to AWS Lambda. 
 
 #### Supported python runtime
 - python3.6

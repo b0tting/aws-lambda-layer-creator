@@ -12,6 +12,10 @@ RUNTIME="$2"
 # shellcheck disable=SC2124
 PACKAGES="${@:3}"
 
+# Rescueing precious chars from bash expansion
+PACKAGES="${PACKAGES/</\\<}"
+PACKAGES="${PACKAGES/>/\\>}"
+
 SUPPORT_PYTHON_RUNTIME=("python3.6,python3.7,python3.8,python3.9,python3.10,python3.11")
 SUPPORT_NODE_RUNTIME=("nodejs10.x,nodejs12.x,nodejs14.x,nodejs16.x,nodejs18.x")
 if [[ "${SUPPORT_NODE_RUNTIME[*]}" != *"${RUNTIME}"* ]] && [[ "${SUPPORT_PYTHON_RUNTIME[*]}" != *"${RUNTIME}"* ]]; then
