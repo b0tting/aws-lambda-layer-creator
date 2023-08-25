@@ -20,7 +20,7 @@ SCRIPT_INSTALL_LOC=/usr/local/bin/create-layer.sh; curl https://raw.githubuserco
 ### Python
 To create the layer the command should be in the specified format.
 ```bash
-create-layer layer-name python-runtime package1 [package2,…]
+create-layer.sh layer-name python-runtime package1 [package2,…]
 ```
 - **create-layer** - Command to invoke the script to create lambda layer
 - **layer-name** - Name of the lambda layer (Please make sure to follow the lambda layer naming convention)
