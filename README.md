@@ -29,7 +29,7 @@ create-layer.sh layer-name python-runtime package1 [package2,…]
 
 Some limited dependencies are supported, for example:
 ```bash
-create-layer.sh requests_310 python3.10 requests urllib3<2
+create-layer.sh -n requests_310 -r python3.10 -p "requests urllib3<2"
 ```
 ..would create a layer with requests and the urllib3 dependecy in a version below 2.0. 
 
@@ -41,17 +41,15 @@ The result will be a ZIP file ready to be uploaded to AWS Lambda.
 - python3.8
 - python3.9
 - python3.10
-- python3.11 (not in Lambda yet)
-
-
+- python3.11 (not in Lambda y
 #### Example
 ```bash
-create-layer pandas-numpy-layer python3.9 numpy pandas
+create-layer -n pandas-numpy-layer -r python3.9 -p "numpy pandas"
 ```
 ### Node JS
 To create the layer the command should be in the specified format.
 ```bash
-create-layer.sh layer-name nodejs-runtime package1 [package2,…]
+create-layer.sh -n layer-name -r nodejs-runtime -p "package1 [package2,…]"
 ```
 - **create-layer** - Command to invoke the script to create lambda layer
 - **layer-name** - Name of the lambda layer (Please make sure to follow the lambda layer naming convention)

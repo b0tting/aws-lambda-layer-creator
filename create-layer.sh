@@ -7,10 +7,23 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-LAYERNAME="$1"
-RUNTIME="$2"
-# shellcheck disable=SC2124
-PACKAGES="${@:3}"
+
+while getopts ":n:r:p:m:" opt
+   do
+     case $opt in
+        n ) LAYERNAME=$OPTARG;;
+        r ) RUNTIME=$OPTARG;;
+        p ) PROXY=$OPTARG;;
+        m ) PACKAGES=$OPTARG;;
+        * ) echo "Invalid option: -$OPTARG" >&2
+            exit 1;;
+     esac
+done
+
+if [[ -z $LAYERNAME || -z $RUNTIME || -z $PACKAGES ]]; then
+  echo 'One or more requirements (-n, -r , -m) are missing'
+  exit 1
+fi
 
 # Rescueing precious chars from bash expansion
 PACKAGES="${PACKAGES/</\\<}"
