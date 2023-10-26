@@ -17,4 +17,4 @@
         - name: Test run lambda creation with node
           run: |
             export TMPDIR=$RUNNER_TEMP
-            bash create-layer.sh -n request-moment-layer -r nodejs14.x -p "request moment"
+            bash create-layer.sh -n request-moment-layer -r nodejs14.x -m "request moment"
