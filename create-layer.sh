@@ -49,20 +49,30 @@ echo "================================="
 echo "Layer name: $LAYERNAME"
 echo "Runtime: $RUNTIME"
 echo "Packages: ${PACKAGES}"
+if [[ -n $PROXY ]]; then
+    echo "Proxy: $PROXY"
+fi
 echo "================================="
 
 HOST_TEMP_DIR="$(mktemp -d)"
+DOCKER_PARAMETERS="--rm -v ${HOST_TEMP_DIR}:/lambda-layer -w /lambda-layer"
+if [[ -n $PROXY ]]; then
+    # shellcheck disable=SC2089
+    DOCKER_PARAMETERS="${DOCKER_PARAMETERS} --env HTTP_PROXY=\"${PROXY}\" --env HTTPS_PROXY=\"${PROXY}\""
+fi
 
 if [[ "${SUPPORT_NODE_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     INSTALLATION_PATH="nodejs"
     DOCKER_IMAGE="public.ecr.aws/sam/build-$RUNTIME:latest"
     echo "Preparing lambda layer"
-    docker run --rm -v "${HOST_TEMP_DIR}:/lambda-layer" -w "/lambda-layer" "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH} && npm install --prefix ${INSTALLATION_PATH} --save ${PACKAGES} && zip -r lambda-layer.zip * && rm -rf ${INSTALLATION_PATH}"
+    # shellcheck disable=SC2090,SC2086
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH} && npm install --prefix ${INSTALLATION_PATH} --save ${PACKAGES} && zip -r lambda-layer.zip * && rm -rf ${INSTALLATION_PATH}"
 elif [[ "${SUPPORT_PYTHON_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     INSTALLATION_PATH="python"
     DOCKER_IMAGE="public.ecr.aws/sam/build-$RUNTIME:latest"
     echo "Preparing lambda layer"
-    docker run --rm -v "${HOST_TEMP_DIR}:/lambda-layer" -w "/lambda-layer" "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH} && pip install ${PACKAGES} -t ${INSTALLATION_PATH}  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
+    # shellcheck disable=SC2090,SC2086
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH} && pip install ${PACKAGES} -t ${INSTALLATION_PATH}  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
 fi
 
 cp "${HOST_TEMP_DIR}"/lambda-layer.zip "${LAYERNAME}".zip
