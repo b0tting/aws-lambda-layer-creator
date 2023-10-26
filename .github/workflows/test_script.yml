@@ -12,9 +12,9 @@
           uses: ludeeus/action-shellcheck@master
         - name: Test run lambda creation with python
           run: |
-            export TMPDIR=$RUNNER_TEMP 
-            bash create-layer.sh requests-layer python3.9 requests pyyaml
+            export TMPDIR=$RUNNER_TEMP
+            bash create-layer.sh -n requests-layer -r python3.9 -m "requests pyyaml"
         - name: Test run lambda creation with node
           run: |
             export TMPDIR=$RUNNER_TEMP
-            bash create-layer.sh request-moment-layer nodejs14.x request moment
+            bash create-layer.sh -n request-moment-layer -r nodejs14.x -p "request moment"
