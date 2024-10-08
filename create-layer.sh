@@ -3,7 +3,7 @@
 set -e
 
 function add_creation_message() {
-  INCLUDE_MESSAGE="This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:")
+  INCLUDE_MESSAGE="This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:"
   INCLUDE_MESSAGE="${INCLUDE_MESSAGE}\n\n$*"
   docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "echo -e \"${INCLUDE_MESSAGE}\" > README.md"
 }
@@ -71,19 +71,15 @@ if [[ "${SUPPORT_NODE_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     INSTALLATION_PATH="nodejs"
     DOCKER_IMAGE="public.ecr.aws/sam/build-$RUNTIME:latest"
     echo "Preparing lambda layer"
-    # shellcheck disable=SC2090,SC2086
     docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH}"
     add_creation_message "$0 $*"
-    # shellcheck disable=SC2090,SC2086
     docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "npm install --prefix ${INSTALLATION_PATH} --save ${PACKAGES} && zip -r lambda-layer.zip * && rm -rf ${INSTALLATION_PATH}"
 elif [[ "${SUPPORT_PYTHON_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     INSTALLATION_PATH="python"
     DOCKER_IMAGE="public.ecr.aws/sam/build-$RUNTIME:latest"
     echo "Preparing lambda layer"
-    # shellcheck disable=SC2090,SC2086
     docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH}"
     add_creation_message "$0 $*"
-    # shellcheck disable=SC2090,SC2086
     docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "pip install ${PACKAGES} -t ${INSTALLATION_PATH}  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
 fi
 
