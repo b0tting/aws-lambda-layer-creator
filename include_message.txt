@@ -1,0 +1,1 @@
+This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:

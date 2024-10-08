@@ -2,6 +2,13 @@
 # Thanks to https://medium.com/srcecde/aws-lambda-layer-building-made-easy-2c97572047db
 set -e
 
+function add_creation_message() {
+  INCLUDE_MESSAGE=$(echo "This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:")
+  INCLUDE_MESSAGE="${INCLUDE_MESSAGE}\n\n$*"
+  docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "echo -e \"${INCLUDE_MESSAGE}\" > README.md"
+}
+
+
 if [ $# -eq 0 ]; then
     >&2 echo "No arguments provided - please provide layer name, runtime and packages For example: ./create-layer.sh my-layer-name python3.8 requests pytz"
     exit 1
@@ -66,13 +73,19 @@ if [[ "${SUPPORT_NODE_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     DOCKER_IMAGE="public.ecr.aws/sam/build-$RUNTIME:latest"
     echo "Preparing lambda layer"
     # shellcheck disable=SC2090,SC2086
-    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH} && npm install --prefix ${INSTALLATION_PATH} --save ${PACKAGES} && zip -r lambda-layer.zip * && rm -rf ${INSTALLATION_PATH}"
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH}"
+    add_creation_message "$0 $*"
+    # shellcheck disable=SC2090,SC2086
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "npm install --prefix ${INSTALLATION_PATH} --save ${PACKAGES} && zip -r lambda-layer.zip * && rm -rf ${INSTALLATION_PATH}"
 elif [[ "${SUPPORT_PYTHON_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     INSTALLATION_PATH="python"
     DOCKER_IMAGE="public.ecr.aws/sam/build-$RUNTIME:latest"
     echo "Preparing lambda layer"
     # shellcheck disable=SC2090,SC2086
-    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH} && pip install ${PACKAGES} -t ${INSTALLATION_PATH}  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH}"
+    add_creation_message "$0 $*"
+    # shellcheck disable=SC2090,SC2086
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "pip install ${PACKAGES} -t ${INSTALLATION_PATH}  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
 fi
 
 cp "${HOST_TEMP_DIR}"/lambda-layer.zip "${LAYERNAME}".zip
