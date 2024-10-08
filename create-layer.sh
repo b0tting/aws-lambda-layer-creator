@@ -4,16 +4,18 @@ set -e
 
 function add_creation_message() {
   INCLUDE_MESSAGE="This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:"
-  INCLUDE_MESSAGE="${INCLUDE_MESSAGE}\n\n$*"
+  # This code requires repeated escaping of the quotes to ensure that the message is correctly written to the README.md file
+  INCLUDE_MESSAGE="${INCLUDE_MESSAGE}\n\n$0 -n ${LAYERNAME} -r ${RUNTIME} -m '${PACKAGES}'"
+  if [[ -n $PROXY ]]; then
+    INCLUDE_MESSAGE="${INCLUDE_MESSAGE} -p ${PROXY}"
+  fi
   docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "echo -e \"${INCLUDE_MESSAGE}\" > README.md"
 }
-
 
 if [ $# -eq 0 ]; then
     >&2 echo "No arguments provided - please provide layer name, runtime and packages For example: ./create-layer.sh my-layer-name python3.8 requests pytz"
     exit 1
 fi
-
 
 while getopts ":n:r:p:m:" opt
    do
@@ -80,7 +82,7 @@ elif [[ "${SUPPORT_PYTHON_RUNTIME[*]}" == *"${RUNTIME}"* ]]; then
     echo "Preparing lambda layer"
     docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "mkdir ${INSTALLATION_PATH}"
     add_creation_message "$0 $*"
-    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "pip install ${PACKAGES} -t ${INSTALLATION_PATH}  && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
+    docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "pip install ${PACKAGES} -t ${INSTALLATION_PATH} --upgrade --force-reinstall && zip -r lambda-layer.zip * -x '*/__pycache__/*' && rm -rf ${INSTALLATION_PATH}"
 fi
 
 cp "${HOST_TEMP_DIR}"/lambda-layer.zip "${LAYERNAME}".zip
