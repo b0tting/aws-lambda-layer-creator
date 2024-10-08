@@ -41,7 +41,9 @@ The result will be a ZIP file ready to be uploaded to AWS Lambda.
 - python3.8
 - python3.9
 - python3.10
-- python3.11 (not in Lambda y
+- python3.11 
+- python3.12
+- python3.13
 #### Example
 ```bash
 create-layer -n pandas-numpy-layer -r python3.9 -m "numpy pandas"

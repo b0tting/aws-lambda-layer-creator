@@ -29,7 +29,7 @@ fi
 PACKAGES="${PACKAGES/</\\<}"
 PACKAGES="${PACKAGES/>/\\>}"
 
-SUPPORT_PYTHON_RUNTIME=("python3.6,python3.7,python3.8,python3.9,python3.10,python3.11")
+SUPPORT_PYTHON_RUNTIME=("python3.6,python3.7,python3.8,python3.9,python3.10,python3.11,python3.12,python3.13")
 SUPPORT_NODE_RUNTIME=("nodejs10.x,nodejs12.x,nodejs14.x,nodejs16.x,nodejs18.x")
 if [[ "${SUPPORT_NODE_RUNTIME[*]}" != *"${RUNTIME}"* ]] && [[ "${SUPPORT_PYTHON_RUNTIME[*]}" != *"${RUNTIME}"* ]]; then
     echo "${RUNTIME} is not a supported runtime. Supported are: ${SUPPORT_PYTHON_RUNTIME[*]} ${SUPPORT_NODE_RUNTIME[*]}"
