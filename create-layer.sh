@@ -3,7 +3,7 @@
 set -e
 
 function add_creation_message() {
-  INCLUDE_MESSAGE=$(echo "This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:")
+  INCLUDE_MESSAGE="This lambda layer has been created by the 'aws-layer-creator' script (https://github.com/b0tting/aws-lambda-layer-creator). To recreate this layer, use the following command:")
   INCLUDE_MESSAGE="${INCLUDE_MESSAGE}\n\n$*"
   docker run ${DOCKER_PARAMETERS} "${DOCKER_IMAGE}" /bin/bash -c "echo -e \"${INCLUDE_MESSAGE}\" > README.md"
 }
@@ -64,7 +64,6 @@ echo "================================="
 HOST_TEMP_DIR="$(mktemp -d)"
 DOCKER_PARAMETERS="--rm -v ${HOST_TEMP_DIR}:/lambda-layer -w /lambda-layer"
 if [[ -n $PROXY ]]; then
-    # shellcheck disable=SC2089
     DOCKER_PARAMETERS="${DOCKER_PARAMETERS} --env HTTP_PROXY=\"${PROXY}\" --env HTTPS_PROXY=\"${PROXY}\""
 fi
 

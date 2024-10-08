@@ -31,7 +31,7 @@ Some limited dependencies are supported, for example:
 ```bash
 create-layer.sh -n requests_310 -r python3.10 -m "requests urllib3<2"
 ```
-..would create a layer with requests and the urllib3 dependecy in a version below 2.0. 
+..would create a layer with requests and the urllib3 dependency in a version below 2.0. 
 
 The result will be a ZIP file ready to be uploaded to AWS Lambda. A README.md will be added to the zip with the command used to create the layer.
 
